@@ -21,5 +21,4 @@ jobs:
           script: |
             cd /home/ubuntu/discord/Backend
             docker-compose down
-            docker build -t discord-backend:latest .
-            docker-compose up -d
+            docker-compose up -d --build
