@@ -129,7 +129,7 @@ app.get('/health', (req, res) => {
 app.get('/check', (req, res) => {
   res.json({
     success: true,
-    message: 'Karo diloun ko salam chahat fateh ali khan',
+    message: 'Karo diloun ko salam chahat fateh ali khan and rahat fateh ali khan',
     documentation: 'ai hi oye hoye bado badi bado badiiiii'
 
   });
