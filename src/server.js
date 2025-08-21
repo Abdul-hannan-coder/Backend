@@ -113,6 +113,13 @@ app.use('/api/v1/project', projectRoutes);
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/comment', commentRoutes);
 app.use('/api/v1/home', homeRoutes);
+app.get('/api/v1/ping', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Server is running',
+    timestamp: new Date().toISOString()
+  });
+});
 
 // Health check
 app.get('/health', (req, res) => {
@@ -126,13 +133,7 @@ app.get('/health', (req, res) => {
 
 
 
-app.get('/check', (req, res) => {
-  res.send(`
-    <h1>Welcome to the Community Learning Platform API</h1>
-    <p>Visit <a href="/api-docs">API Documentation</a> for more details.</p>
-    <p>Health Check: <a href="/health">Health Check</a></p>
-  `);
-});
+
 
 
 
