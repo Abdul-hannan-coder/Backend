@@ -1,0 +1,16 @@
+{
+  "name": "otp-test-suite",
+  "version": "1.0.0",
+  "description": "Comprehensive test suite for OTP functionality and database connectivity",
+  "main": "test-otp.js",
+  "scripts": {
+    "test": "node test-otp.js",
+    "test:install": "npm install axios && node test-otp.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "keywords": ["otp", "test", "database", "api"],
+  "author": "Test Suite",
+  "license": "MIT"
+}
