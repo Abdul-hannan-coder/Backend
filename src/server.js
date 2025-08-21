@@ -124,6 +124,18 @@ app.get('/health', (req, res) => {
   });
 });
 
+
+
+app.get('/check', (req, res) => {
+  res.send(`
+    <h1>Welcome to the Community Learning Platform API</h1>
+    <p>Visit <a href="/api-docs">API Documentation</a> for more details.</p>
+    <p>Health Check: <a href="/health">Health Check</a></p>
+  `);
+});
+
+
+
 // 404 handler
 app.use(notFound);
 
