@@ -130,7 +130,7 @@ app.get('/check', (req, res) => {
   res.json({
     success: true,
     message: 'Karo diloun ko salam chahat fateh ali khan',
-    documentation: 'ai hi oye hoye bado badi bado badi'
+    documentation: 'ai hi oye hoye bado badi bado badiiiii'
 
   });
 
