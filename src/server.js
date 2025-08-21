@@ -131,7 +131,12 @@ app.get('/check', (req, res) => {
     success: true,
     message: 'Welcome to the Community Learning Platform API',
     documentation: 'Visit /api-docs for API documentation'
+
   });
+
+
+  console.log('Check endpoint hit');
+
 });
 
 
