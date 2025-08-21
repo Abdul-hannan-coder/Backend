@@ -129,8 +129,8 @@ app.get('/health', (req, res) => {
 app.get('/check', (req, res) => {
   res.json({
     success: true,
-    message: 'Welcome to the Community Learning Platform API',
-    documentation: 'Visit /api-docs for API documentation'
+    message: 'Karo diloun ko salam chahat fateh ali khan',
+    documentation: 'ai hi oye hoye bado badi bado badi'
 
   });
 
@@ -171,7 +171,7 @@ const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
   console.log(`API documentation available at http://localhost:${PORT}/api-docs`);
-    console.log("Hello from this CId CD Pipeline");
+    console.log("--- CI/CD pipeline is now fully operational! ---");
 
 });
 
