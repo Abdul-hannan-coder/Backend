@@ -10,15 +10,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-          
-      - name: Deploy to VM via SSH
-        uses: appleboy/ssh-action@v1.0.3
+        uses: actions/checkout@v2
+
+      - name: Deploy to VM
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/ubuntu/discord/Backend
+            cd ~/discord/Backend
+            git pull origin main
             docker-compose down
-            docker-compose up -d --build
+            docker-compose up -d --build --no-cache
