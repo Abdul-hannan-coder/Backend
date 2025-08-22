@@ -193,7 +193,7 @@ const login = async (req, res) => {
 
     // Check if user is verified
     if (!user.isVerified) {
-      return AuthError(res, 'Please verify your email first');
+      return res.status(401).json({ message: 'Email not verified. Please verify your email before logging in.' , isVerified: user.isVerified });
     }
 
     // Check password
