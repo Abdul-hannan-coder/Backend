@@ -130,7 +130,7 @@ app.get('/check', (req, res) => {
   res.json({
     success: true,
     message: 'I love books',
-    documentation: 'ai hi oye hoye bado badi bado badiiiii'
+    documentation: 'hello from  me '
 
   });
 
