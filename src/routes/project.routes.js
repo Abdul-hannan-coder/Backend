@@ -223,7 +223,7 @@ router.get('/', authMiddleware, roleMiddleware(['admin']), getAllProjects);
  *        404:
  *          description: Project not found
  */
-route.get('/project/:projectId', getSingleProject);
+router.get('/project/:projectId', getSingleProject);
 
 /**
  * @swagger
