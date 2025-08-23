@@ -133,7 +133,7 @@ app.get('/health', (req, res) => {
 app.get('/check', (req, res) => {
   res.json({
     success: true,
-    message: 'I love books',
+    message: 'I love bs',
     documentation: 'hello from  me '
 
   });
