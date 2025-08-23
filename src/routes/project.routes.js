@@ -197,32 +197,67 @@ router.get('/', authMiddleware, roleMiddleware(['admin']), getAllProjects);
 
 
 /**
- *  @swagger
- *  /api/v1/project/{projectId}:
- *    get:
- *      summary: Get a single project by ID
- *      tags: [Projects]
- *      parameters:
- *        - in: path
- *          name: projectId
- *          required: true
- *          schema:
- *            type: string
- *      responses:
- *        200:
- *          description: Project retrieved successfully
- *          content:
- *            application/json:
- *              schema:
- *                type: object
- *                properties:
- *                  success:
- *                    type: boolean
- *                  project:
- *                    $ref: '#/components/schemas/Project'
- *        404:
- *          description: Project not found
+ * @swagger
+ * /api/v1/project/{projectId}:
+ *   get:
+ *     summary: Get a single project by ID
+ *     description: Fetches a project by its unique ID. Optionally ensures it belongs to the specified user if userId is provided.
+ *     tags: [Projects]
+ *     parameters:
+ *       - in: path
+ *         name: projectId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the project to retrieve
+ *     responses:
+ *       200:
+ *         description: Project retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Project retrieved successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     project:
+ *                       $ref: '#/components/schemas/Project'
+ *       404:
+ *         description: Project not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Project not found
+ *       500:
+ *         description: Server error while fetching project
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Server error while fetching project
  */
+
+
 router.get('/project/:projectId', getSingleProject);
 
 /**

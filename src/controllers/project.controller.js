@@ -161,38 +161,26 @@ const getAllProjects = async (req, res) => {
 
 
 
-
 const getSingleProject = async (req, res) => {
   try {
-    const { projectId } = req.params;
+    const { projectId, userId } = req.params;
 
-    // Validate projectId is provided
-    if (!projectId) {
-      return res.status(400).json({ message: 'Project ID is required' });
-    }
+    // Find project by ID and make sure it belongs to the user
+    const project = await Project.findOne({ _id: projectId, userId })
+      .populate('userId', 'fullName email isBlocked');
 
-    // Find project by ID
-    const project = await Project.findById()
-      .populate('userId', 'fullName email isBlocked')
-      .lean(); // Optional: Use lean for better performance
-
-    // Check if project exists
     if (!project) {
-      return res.status(404).json({ message: 'Project not found' });
+      return ResourceNotFound(res, 'Project');
     }
 
-    // Return success response
-    return res.status(200).json({
-      message: 'Project retrieved successfully',
-      data: { project },
-    });
+    return SuccessResponse(res, 'Project retrieved successfully', { project });
   } catch (error) {
-    console.error('Error fetching project:', error); // Log error for debugging
-    return res.status(500).json({ message: 'Server error while fetching project' });
+    return ServerError(res, 'Server error while fetching project');
   }
 };
 
 export default getSingleProject;
+
 
 export {
   createProject,
