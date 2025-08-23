@@ -203,7 +203,7 @@ const updateProfile = async (req, res) => {
   try {
     const { userID } = req.params;
     console.log('Update - Received req.body:', req.body);
-    console.log('Update - Received req.files:', req.files); // This logs but files aren't processed!
+    console.log('Update - Received req.files:', req.files);
     
     const {
       profession,
@@ -227,7 +227,7 @@ const updateProfile = async (req, res) => {
       return ResourceNotFound(res, 'Profile not found. Please create one first.');
     }
 
-    // ✅ ADD THIS: Process file uploads (same as createProfile)
+    // Process file uploads
     const newCertificates = req.files?.certificates?.map(file => file.path) || [];
     const newProfileImage = req.files?.profileImage?.[0]?.path || null;
     
@@ -247,21 +247,52 @@ const updateProfile = async (req, res) => {
       'Profile.updatedAt': new Date()
     };
 
-    // ✅ ADD THIS: Handle file updates
+    // Handle file updates
     if (newProfileImage) {
       updateFields['Profile.profileImage'] = newProfileImage;
       console.log('✅ Setting new profile image:', newProfileImage);
     }
 
     if (newCertificates.length > 0) {
-      // Option 1: Replace all certificates
       updateFields['Profile.certificates'] = newCertificates;
-      
-      // Option 2: Append to existing (uncomment if you prefer this)
-      // const existingCertificates = user.Profile.certificates || [];
-      // updateFields['Profile.certificates'] = [...existingCertificates, ...newCertificates];
-      
       console.log('✅ Setting new certificates:', newCertificates);
+    }
+
+    // ✅ ADD THIS: Check if profile is now complete after updates
+    const currentProfile = user.Profile;
+    const updatedProfile = {
+      profession: profession || currentProfile.profession,
+      skills: skills ? skills.split(',').map(skill => skill.trim()) : currentProfile.skills,
+      description: description || currentProfile.description,
+      yearsOfExperience: yearsOfExperience || currentProfile.yearsOfExperience,
+      linkedin: linkedin || currentProfile.linkedin,
+      github: github || currentProfile.github,
+      fiverr: fiverr || currentProfile.fiverr,
+      whatsapp: whatsapp || currentProfile.whatsapp,
+      profileImage: newProfileImage || currentProfile.profileImage,
+      certificates: newCertificates.length > 0 ? newCertificates : currentProfile.certificates
+    };
+
+    // ✅ Profile completion logic (same as frontend)
+    const isProfileComplete = !!(
+      updatedProfile.profession && updatedProfile.profession.trim() !== '' &&
+      updatedProfile.skills && (
+        (Array.isArray(updatedProfile.skills) && updatedProfile.skills.length > 0) ||
+        (typeof updatedProfile.skills === 'string' && updatedProfile.skills.trim() !== '')
+      ) &&
+      updatedProfile.description && updatedProfile.description.trim() !== ''
+    );
+
+    console.log('🔍 Profile completion check:');
+    console.log('- Profession:', updatedProfile.profession);
+    console.log('- Skills:', updatedProfile.skills);
+    console.log('- Description:', updatedProfile.description);
+    console.log('- Is Complete:', isProfileComplete);
+
+    // ✅ Update isProfileComplete if it changed
+    if (user.isProfileComplete !== isProfileComplete) {
+      updateFields['isProfileComplete'] = isProfileComplete;
+      console.log(`📝 Updating isProfileComplete: ${user.isProfileComplete} → ${isProfileComplete}`);
     }
     
     console.log('📝 Update fields being applied:', updateFields);
@@ -275,6 +306,7 @@ const updateProfile = async (req, res) => {
 
     console.log('✅ Updated user profile image:', updatedUser.Profile.profileImage);
     console.log('✅ Updated user certificates:', updatedUser.Profile.certificates);
+    console.log('✅ Updated user isProfileComplete:', updatedUser.isProfileComplete);
 
     return SuccessResponse(res, 'Profile updated successfully', {
       user: updatedUser,
