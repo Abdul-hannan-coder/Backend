@@ -210,7 +210,8 @@ const login = async (req, res) => {
       fullName: user.fullName,
       email: user.email,
       role: user.role,
-      isVerified: user.isVerified
+      isVerified: user.isVerified,
+      isProfileCompleted: user.isProfileCompleted
     };
 
     return SuccessResponse(res, 'Login successful', { token, user: userData });
