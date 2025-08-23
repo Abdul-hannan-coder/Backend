@@ -10,18 +10,29 @@ import {
 } from '../utils/helperFunctions.js';
 
 // @desc    Create project
-// @route   POST /project/add
+// @route   POST /project/add/:userID
 // @access  Private
 const createProject = async (req, res) => {
   try {
     const { title, summary, skills, description, link } = req.body;
     const userId = req.params.userID; // Extract userId from request parameters
 
-  
+    console.log('Creating project for user:', userId);
+    console.log('Request body:', req.body);
+    console.log('Request files:', req.files);
+
+    // Validate user exists
+    const user = await User.findById(userId);
+    if (!user) {
+      return ResourceNotFound(res, 'User');
+    }
 
     // Process uploaded files
     const thumbnailPath = req.files?.thumbnail?.[0]?.path || null;
     const imagePaths = req.files?.images?.map(file => file.path) || [];
+
+    console.log('Thumbnail path:', thumbnailPath);
+    console.log('Image paths:', imagePaths);
 
     // Create the project
     const project = await Project.create({
@@ -35,6 +46,8 @@ const createProject = async (req, res) => {
       images: imagePaths
     });
 
+    console.log('Project created:', project);
+
     return CreatedResponse(res, 'Project created successfully', project);
   } catch (error) {
     console.error('Error during project creation:', error);
@@ -47,11 +60,17 @@ const createProject = async (req, res) => {
 // @access  Private
 const getMyProjects = async (req, res) => {
   try {
+    console.log('getMyProjects called for user:', req.user._id);
+    
     const projects = await Project.find({ userId: req.user._id })
       .sort({ createdAt: -1 });
 
+    console.log('Found projects:', projects.length);
+    console.log('Projects data:', projects);
+
     return SuccessResponse(res, 'Projects retrieved successfully', { projects, count: projects.length });
   } catch (error) {
+    console.error('Error in getMyProjects:', error);
     return ServerError(res, 'Server error while fetching projects');
   }
 };
@@ -178,9 +197,6 @@ const getSingleProject = async (req, res) => {
     return ServerError(res, 'Server error while fetching project');
   }
 };
-
-export default getSingleProject;
-
 
 export {
   createProject,
