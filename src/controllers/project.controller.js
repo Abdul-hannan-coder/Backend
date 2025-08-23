@@ -165,7 +165,7 @@ const getSingleProject = async (req, res) => {
   try {
     const {  projectId} = req.params;
 
-    const project = await Project.findById(projectId)
+    const project = await Project.findOne({ _id: projectId })
       .populate('userId', 'fullName email isBlocked');
 
     if (!project) {
