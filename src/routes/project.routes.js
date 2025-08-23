@@ -194,6 +194,37 @@ router.get('/:userId', getProjectsByUser);
  */
 router.get('/', authMiddleware, roleMiddleware(['admin']), getAllProjects);
 
+
+
+/**
+ *  @swagger
+ *  /api/v1/project/{projectId}:
+ *    get:
+ *      summary: Get a single project by ID
+ *      tags: [Projects]
+ *      parameters:
+ *        - in: path
+ *          name: projectId
+ *          required: true
+ *          schema:
+ *            type: string
+ *      responses:
+ *        200:
+ *          description: Project retrieved successfully
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                  project:
+ *                    $ref: '#/components/schemas/Project'
+ *        404:
+ *          description: Project not found
+ */
+route.get('/project/:projectId', getSingleProject);
+
 /**
  * @swagger
  * /api/v1/project/update/{id}:

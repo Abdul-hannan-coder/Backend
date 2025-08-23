@@ -159,11 +159,31 @@ const getAllProjects = async (req, res) => {
   }
 };
 
+
+
+const getSingleProject = async (req, res) => {
+  try {
+    const {  projectId} = req.params;
+
+    const project = await Project.findById(projectId)
+      .populate('userId', 'fullName email isBlocked');
+
+    if (!project) {
+      return ResourceNotFound(res, 'Project');
+    }
+
+    return SuccessResponse(res, 'Project retrieved successfully', { project });
+  } catch (error) {
+    return ServerError(res, 'Server error while fetching project');
+  }
+};
+
 export {
   createProject,
   getMyProjects,
   updateProject,
   deleteProject,
   getProjectsByUser,
-  getAllProjects
+  getAllProjects,
+  getSingleProject
 };
