@@ -182,18 +182,23 @@ const getAllProjects = async (req, res) => {
 
 const getSingleProject = async (req, res) => {
   try {
-    const { projectId, userId } = req.params;
+    const { projectId } = req.params;
 
-    // Find project by ID and make sure it belongs to the user
-    const project = await Project.findOne({ _id: projectId, userId })
+    console.log('Getting single project with ID:', projectId);
+
+    // Find project by ID only (no user restriction for public access)
+    const project = await Project.findById(projectId)
       .populate('userId', 'fullName email isBlocked');
 
     if (!project) {
       return ResourceNotFound(res, 'Project');
     }
 
+    console.log('Found project:', project);
+
     return SuccessResponse(res, 'Project retrieved successfully', { project });
   } catch (error) {
+    console.error('Error in getSingleProject:', error);
     return ServerError(res, 'Server error while fetching project');
   }
 };

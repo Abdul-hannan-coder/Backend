@@ -198,7 +198,7 @@ router.get('/', authMiddleware, roleMiddleware(['admin']), getAllProjects);
 
 /**
  * @swagger
- * /api/v1/project/{projectId}:
+ * /api/v1/project/single/{projectId}:
  *   get:
  *     summary: Get a single project by ID
  *     description: Fetches a project by its unique ID. Optionally ensures it belongs to the specified user if userId is provided.
@@ -258,7 +258,7 @@ router.get('/', authMiddleware, roleMiddleware(['admin']), getAllProjects);
  */
 
 
-router.get('/project/:projectId', getSingleProject);
+router.get('/single/:projectId', getSingleProject);
 
 /**
  * @swagger
