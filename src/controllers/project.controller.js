@@ -161,7 +161,6 @@ const getAllProjects = async (req, res) => {
 
 
 
-import Project from '../models/projectModel.js'; // Adjust the import path
 
 const getSingleProject = async (req, res) => {
   try {
