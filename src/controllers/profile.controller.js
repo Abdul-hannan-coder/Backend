@@ -16,8 +16,6 @@ import {
 // @access  Private
 const createProfile = async (req, res) => {
   const userID = req.params.userID;
-  console.log('Received req.body:', req.body);
-  console.log('Received req.files:', req.files);
   try {
     const {
       profession,
@@ -35,9 +33,6 @@ const createProfile = async (req, res) => {
     if (!user) {
       return ResourceNotFound(res, 'User');
     }
-
-    console.log('User before update isProfileComplete:', user.isProfileComplete);
-    console.log('User before update Profile:', user.Profile);
 
     // Check if profile already exists
     if (user.Profile && Object.keys(user.Profile).length > 0) {
@@ -68,9 +63,6 @@ const createProfile = async (req, res) => {
     };
 
     // Update user with profile data
-    console.log('About to update user with isProfileComplete: true');
-    
-    // Try using save() method instead of findByIdAndUpdate
     user.Profile = profileData;
     user.isProfileComplete = true;
     user.markModified('Profile'); // Explicitly mark Profile as modified
@@ -82,10 +74,6 @@ const createProfile = async (req, res) => {
     const userResponse = updatedUser.toObject();
     delete userResponse.password;
 
-    console.log('Updated user isProfileComplete:', userResponse.isProfileComplete);
-    console.log('Full updated user:', JSON.stringify(userResponse, null, 2));
-
-    console.log('Profile created for user:', userResponse.fullName);
     return CreatedResponse(res, 'Profile created successfully', {
       user: userResponse,
       profile: userResponse.Profile
@@ -202,8 +190,6 @@ const getProfileByUser = async (req, res) => {
 const updateProfile = async (req, res) => {
   try {
     const { userID } = req.params;
-    console.log('Update - Received req.body:', req.body);
-    console.log('Update - Received req.files:', req.files);
     
     const {
       profession,
@@ -230,9 +216,6 @@ const updateProfile = async (req, res) => {
     // Process file uploads
     const newCertificates = req.files?.certificates?.map(file => file.path) || [];
     const newProfileImage = req.files?.profileImage?.[0]?.path || null;
-    
-    console.log('🖼️ New profile image:', newProfileImage);
-    console.log('📜 New certificates:', newCertificates);
 
     // Prepare the update object
     const updateFields = {
@@ -250,12 +233,10 @@ const updateProfile = async (req, res) => {
     // Handle file updates
     if (newProfileImage) {
       updateFields['Profile.profileImage'] = newProfileImage;
-      console.log('✅ Setting new profile image:', newProfileImage);
     }
 
     if (newCertificates.length > 0) {
       updateFields['Profile.certificates'] = newCertificates;
-      console.log('✅ Setting new certificates:', newCertificates);
     }
 
     // ✅ ADD THIS: Check if profile is now complete after updates
@@ -273,7 +254,7 @@ const updateProfile = async (req, res) => {
       certificates: newCertificates.length > 0 ? newCertificates : currentProfile.certificates
     };
 
-    // ✅ Profile completion logic (same as frontend)
+    // Profile completion logic (same as frontend)
     const isProfileComplete = !!(
       updatedProfile.profession && updatedProfile.profession.trim() !== '' &&
       updatedProfile.skills && (
@@ -283,19 +264,10 @@ const updateProfile = async (req, res) => {
       updatedProfile.description && updatedProfile.description.trim() !== ''
     );
 
-    console.log('🔍 Profile completion check:');
-    console.log('- Profession:', updatedProfile.profession);
-    console.log('- Skills:', updatedProfile.skills);
-    console.log('- Description:', updatedProfile.description);
-    console.log('- Is Complete:', isProfileComplete);
-
-    // ✅ Update isProfileComplete if it changed
+    // Update isProfileComplete if it changed
     if (user.isProfileComplete !== isProfileComplete) {
       updateFields['isProfileComplete'] = isProfileComplete;
-      console.log(`📝 Updating isProfileComplete: ${user.isProfileComplete} → ${isProfileComplete}`);
     }
-    
-    console.log('📝 Update fields being applied:', updateFields);
     
     // Update user profile
     const updatedUser = await User.findByIdAndUpdate(
@@ -303,10 +275,6 @@ const updateProfile = async (req, res) => {
       { $set: updateFields },
       { new: true, runValidators: true }
     ).select('-password');
-
-    console.log('✅ Updated user profile image:', updatedUser.Profile.profileImage);
-    console.log('✅ Updated user certificates:', updatedUser.Profile.certificates);
-    console.log('✅ Updated user isProfileComplete:', updatedUser.isProfileComplete);
 
     return SuccessResponse(res, 'Profile updated successfully', {
       user: updatedUser,
