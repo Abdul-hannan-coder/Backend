@@ -5,14 +5,14 @@ import {
   updateProject,
   deleteProject,
   getProjectsByUser,
-  getAllProjects
+  getAllProjects,
+  getSingleProject
 } from '../controllers/project.controller.js';
 import { authMiddleware, roleMiddleware } from '../middlewares/auth.js';
 import { projectUploadWithErrorHandling } from '../middlewares/upload.js';
 import cloudinary from '../config/cloudinary.js';
 
 const router = express.Router();
-
 
 /**
  * @swagger
