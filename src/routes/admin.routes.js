@@ -114,10 +114,10 @@ router.get('/user/:userId',  getUser);
 
 /**
  * @swagger
- * /api/v1/users/block/{userId}:
+ * /api/v1/admin/block/{userId}:
  *   put:
  *     summary: Block a user
- *     tags: [Users]
+ *     tags: [Admin, Users]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -182,16 +182,16 @@ router.get('/user/:userId',  getUser);
  *       500:
  *         description: Server error
  */
-router.put('/block/:userId',authMiddleware, roleMiddleware(['admin']), blockUser);
+router.put('/block/:userId', authMiddleware, roleMiddleware(['admin']), blockUser);
 
 
 
 /**
  * @swagger
- * /api/v1/users/unblock/{userId}:
+ * /api/v1/admin/unblock/{userId}:
  *   put:
  *     summary: Unblock a user
- *     tags: [Users]
+ *     tags: [Admin, Users]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -241,15 +241,13 @@ router.put('/block/:userId',authMiddleware, roleMiddleware(['admin']), blockUser
  *       500:
  *         description: Server error
  */
-
-
-router.put('/unblock/:userId',authMiddleware, roleMiddleware(['admin']), unblockUser);
+router.put('/unblock/:userId', authMiddleware, roleMiddleware(['admin']), unblockUser);
 /**
  * @swagger
- * /api/v1/users/delete-user/{id}:
+ * /api/v1/admin/delete-user/{id}:
  *   delete:
  *     summary: Delete a user and all associated data
- *     tags: [Users]
+ *     tags: [Admin, Users]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -294,14 +292,7 @@ router.put('/unblock/:userId',authMiddleware, roleMiddleware(['admin']), unblock
  *       500:
  *         description: Server error
  */
-
-
-
-
-
-
-
-router.delete('/admin/delete-user/:id',authMiddleware, roleMiddleware(['admin']), deleteUser);
+router.delete('/delete-user/:id', authMiddleware, roleMiddleware(['admin']), deleteUser);
 
 router.get('/dashboard', authMiddleware , roleMiddleware(['admin']), getDashboardStats);
 

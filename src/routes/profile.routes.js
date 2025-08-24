@@ -652,7 +652,7 @@ router.put('/update-certificates/:userID', authMiddleware, certificateUpload, up
  *       500:
  *         description: Internal server error
  */
-router.get('/', authMiddleware, getAllProfiles);
+router.get('/',  getAllProfiles);
 
 /**
  * @swagger

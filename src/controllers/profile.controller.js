@@ -296,7 +296,11 @@ const updateProfile = async (req, res) => {
 // @access  Private/Admin
 const getAllProfiles = async (req, res) => {
   try {
-    const profiles = await User.find({ 'Profile.profession': { $exists: true } })
+    const profiles = await User.find({
+      isBlocked: false,                    // User is not blocked
+      isProfileComplete: true,             // Profile is completed
+      'Profile.profession': { $exists: true, $ne: '' }  // Has profession field
+    })
       .select('fullName email isBlocked isProfileComplete Profile')
       .sort({ createdAt: -1 })
       .lean();
@@ -309,9 +313,7 @@ const getAllProfiles = async (req, res) => {
     console.error('Error fetching all profiles:', error);
     return ServerError(res, 'Server error while fetching profiles');
   }
-};
-
-// @desc    Delete profile (admin only)
+};// @desc    Delete profile (admin only)
 // @route   DELETE /profile/delete/:userID
 // @access  Private/Admin
 const deleteProfile = async (req, res) => {
