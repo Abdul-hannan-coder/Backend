@@ -169,7 +169,7 @@ router.get('/:userId', getProjectsByUser);
  * @swagger
  * /api/v1/project:
  *   get:
- *     summary: Get all projects (Admin only)
+ *     summary: Get all projects (Public)
  *     tags: [Projects]
  *     security:
  *       - bearerAuth: []
@@ -192,7 +192,7 @@ router.get('/:userId', getProjectsByUser);
  *       403:
  *         description: Forbidden - Admin access required
  */
-router.get('/', authMiddleware, roleMiddleware(['admin']), getAllProjects);
+router.get('/',  getAllProjects);
 
 
 
