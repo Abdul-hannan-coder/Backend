@@ -1,4 +1,6 @@
 const axios = require('axios');
+const request = require('supertest');
+const app = require('../src/server');
 
 // Test configuration
 const BASE_URL = 'http://localhost:5000';
@@ -214,6 +216,26 @@ const tests = {
       logTest('OTP Verification', false, error.message);
       return false;
     }
+  },
+
+  // Test 7: Profile Completeness Check
+  async testProfileCompleteness() {
+    try {
+      log(colors.blue, '\n🔍 Testing 7: Profile Completeness Check');
+      
+      // Replace with a valid user ID for testing
+      const userID = 'testUserID';
+      const response = await request(app).get(`/check-completeness/${userID}`);
+      
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty('isComplete'); // Adjust based on actual response structure
+      
+      logTest('Profile Completeness Check', true, `User ID: ${userID}`);
+      return true;
+    } catch (error) {
+      logTest('Profile Completeness Check', false, error.message);
+      return false;
+    }
   }
 };
 
@@ -229,7 +251,8 @@ async function runAllTests() {
     existingOTPs: false,
     otpCreation: false,
     registration: false,
-    verification: false
+    verification: false,
+    profileCompleteness: false
   };
   
   try {
@@ -245,6 +268,7 @@ async function runAllTests() {
     results.otpCreation = await tests.testOTPCreation();
     results.registration = await tests.testUserRegistration();
     results.verification = await tests.testOTPVerification();
+    results.profileCompleteness = await tests.testProfileCompleteness();
     
   } catch (error) {
     log(colors.red, `\n❌ Test execution error: ${error.message}`);

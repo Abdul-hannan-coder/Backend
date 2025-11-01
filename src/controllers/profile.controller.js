@@ -1,6 +1,3 @@
-
-
-
 import User from '../models/User.js';
 import {
   ServerError,
@@ -35,7 +32,7 @@ const createProfile = async (req, res) => {
     }
 
     // Check if profile already exists
-    if (user.Profile && Object.keys(user.Profile).length > 0) {
+    if (user.Profile && Object.keys(user.Profile).length > 0 && user.Profile.profession) {
       return ClientError(res, 'Profile already exists for this user. Use the update endpoint.');
     }
 
@@ -427,6 +424,28 @@ const updateProfileImage = async (req, res) => {
   }
 };
 
+// @desc    Check if user profile is complete
+// @route   GET /profile/check-completeness/:userID
+// @access  Private
+const checkProfileCompleteness = async (req, res) => {
+  const userID = req.params.userID;
+  try {
+    const user = await User.findById(userID);
+    if (!user) {
+      return ResourceNotFound(res, 'User');
+    }
+
+    // Check if profile is complete
+    const isComplete = user.Profile && user.Profile.profession;
+
+    return SuccessResponse(res, 'Profile completeness check', { isComplete });
+  } catch (error) {
+    console.error('Error checking profile completeness:', error);
+    return ServerError(res, 'Server error during profile completeness check');
+  }
+};
+
+// Export the functions
 export {
   createProfile,
   getProfileByUser, // This single endpoint replaces getMyProfile and getProfileByUser.
@@ -434,5 +453,6 @@ export {
   getAllProfiles,
   deleteProfile,
   updateCertificates,
-  updateProfileImage
+  updateProfileImage,
+  checkProfileCompleteness
 };

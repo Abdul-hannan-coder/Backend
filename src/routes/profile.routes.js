@@ -1,6 +1,3 @@
-
-
-
 import express from 'express';
 import {
   createProfile,
@@ -10,7 +7,8 @@ import {
   getAllProfiles,
   deleteProfile,
   updateCertificates,
-  updateProfileImage
+  updateProfileImage,
+  getProfileCompleteness
 } from '../controllers/profile.controller.js';
 import { authMiddleware, roleMiddleware } from '../middlewares/auth.js';
 import { profileUploadWithErrorHandling, profileImageUpload, certificateUpload, profileUpload } from '../middlewares/upload.js'
@@ -853,5 +851,53 @@ router.post('/test-upload', profileUploadWithErrorHandling, (req, res) => {
     });
   }
 });
+
+/**
+ * @swagger
+ * /api/v1/profile/check-completeness/{userID}:
+ *   get:
+ *     summary: Check profile completeness
+ *     description: Checks if the user's profile is complete based on certain fields
+ *     tags: [Profiles]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userID
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: User ID to check profile completeness for
+ *         example: "68a1bf1a589c37d0d268ef00"
+ *     responses:
+ *       200:
+ *         description: Profile completeness checked successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 isComplete:
+ *                   type: boolean
+ *                   example: true
+ *       404:
+ *         description: User or Profile not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "User or Profile not found"
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ */
+router.get('/check-completeness/:userID', authMiddleware, getProfileCompleteness);
 
 export default router;
