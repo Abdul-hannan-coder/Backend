@@ -67,6 +67,9 @@ const register = async (req, res) => {
 
     return CreatedResponse(res, 'Registration successful. Please check your email for verification code.', { userId: user._id });
   } catch (error) {
+    // Log the error for debugging
+    console.error('Registration error:', error);
+
     // Handle mongoose validation errors
     if (error.name === 'ValidationError') {
       const validationErrors = {};
@@ -79,6 +82,11 @@ const register = async (req, res) => {
     // Handle duplicate key errors
     if (error.code === 11000) {
       return ClientError(res, 'User already exists with this email');
+    }
+
+    // In non-production, return the actual error for easier debugging
+    if (process.env.NODE_ENV && process.env.NODE_ENV !== 'production') {
+      return ServerError(res, error);
     }
 
     return ServerError(res, 'Server error during registration');
