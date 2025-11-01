@@ -1,14 +1,13 @@
 import express from 'express';
 import {
   createProfile,
- 
   updateProfile,
   getProfileByUser,
   getAllProfiles,
   deleteProfile,
   updateCertificates,
   updateProfileImage,
-  getProfileCompleteness
+  checkProfileCompleteness
 } from '../controllers/profile.controller.js';
 import { authMiddleware, roleMiddleware } from '../middlewares/auth.js';
 import { profileUploadWithErrorHandling, profileImageUpload, certificateUpload, profileUpload } from '../middlewares/upload.js'
@@ -898,6 +897,6 @@ router.post('/test-upload', profileUploadWithErrorHandling, (req, res) => {
  *       500:
  *         description: Server error
  */
-router.get('/check-completeness/:userID', authMiddleware, getProfileCompleteness);
+router.get('/check-completeness/:userID', authMiddleware, checkProfileCompleteness);
 
 export default router;
