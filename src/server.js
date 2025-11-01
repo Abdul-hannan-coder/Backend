@@ -83,20 +83,16 @@ const allowedOrigins = [
 // }));
 // // app.use(cors());
 
-// //Explicitly handle preflight
-// app.options('*', cors({
-//   origin: allowedOrigins,
-//   credentials: true
-// }));
+//Explicitly handle preflight
+app.options('*', cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
 
 // app.use(cors({
 //   origin:"*",
 //   credentials: true
 // }))
-app.use(cors({
-  origin: "http://localhost:5173", // your Vite frontend
-  credentials: true
-}));
 
 
 
